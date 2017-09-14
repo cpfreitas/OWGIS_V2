@@ -8,8 +8,8 @@
 		<Menu ID="Temp2" EN="Temperature at 2 meters" ES="Temperatura a 2 metros"/>
 		<Menu ID="Pblh" EN="PBLH" ES="PBLH"/>
 		<Menu ID="t2" EN="Temperature" ES="Temperatura"/>
-		<Menu ID="co" EN="Precipitation Acumulated each 6 hours" ES="Precipitacion acumulada  cada 6 horas"/> 
-		<Menu ID="o3" EN="Total Precipitation Acumulated" ES="Precipitacion Total"/>
+		<Menu ID="co" EN="CO" ES="CO"/> 
+		<Menu ID="o3" EN="O3" ES="O3"/>
 		<Menu ID="PM10" EN="Hourly Precipitation " ES="Precipitacion Horaria"/>
                 
                 <Menu ID="so2" EN="Cloud Cover IR" ES="Cobertura Nubosa IR" />
@@ -33,26 +33,26 @@
             
             <layer Menu="Dom1,Temp2" EN="Temperature at 2 meters." ES="Temperatura en superficie a 2 metros" style="default-scalar" palette="temperatura" name="wrf-chem/T2C" mincolor="0" maxcolor="100" />
             
-            <layer Menu="Dom1,Pblh" EN="Planetary boundary layer height" ES="Altura de la capa límite planetaria" style="default-scalar" palette="prec2" name="wrf-chem/PBLH" mincolor="0" maxcolor="100" />
+            <layer Menu="Dom1,Pblh" EN="Planetary boundary layer height" ES="Altura de la capa límite planetaria" style="default-scalar" palette="prec2" name="wrf-chem/PBLH" mincolor="-170" maxcolor="3770" />
 
-            <layer Menu="Dom1,t2" EN="Temperature" ES="Temperatura" style="default-scalar" palette="temperatura" name="wrf-chem/T2" mincolor="0" maxcolor="100" />
+            <layer Menu="Dom1,t2" EN="Temperature" ES="Temperatura" style="default-scalar" palette="temperatura" name="wrf-chem/T2" mincolor="250" maxcolor="315" />
                 
-            <layer Menu="Dom1,co" EN="CO (ppmv)" ES="CO (ppmv)" style="default-scalar" palette="seq-Blues" name="wrf-chem/co" mincolor="0" maxcolor="100" />
+            <layer Menu="Dom1,co" EN="CO (ppmv)" ES="CO (ppmv)" style="default-scalar" palette="seq-Blues" name="wrf-chem/co" mincolor="0.07" maxcolor="0.085" />
 
-            <layer Menu="Dom1,o3" EN="O3 (ppmv)" ES="O3 (ppmv)" style="default-scalar" palette="prec2" name="wrf-chem/o3" mincolor="0" maxcolor="100" />
+            <layer Menu="Dom1,o3" EN="O3 (ppmv)" ES="O3 (ppmv)" style="default-scalar" palette="seq-Blues" name="wrf-chem/o3"  />
             
             <layer Menu="Dom1,VtoSup10" EN="Wind speed at 10 meters" ES="Viento a 10 metros" 
                     style="default-scalar" palette="wind2" name="wrf-chem/Uat10:Vat10-mag"
                     overlaystreamlines="wrf-chem/Uat10:wrf-chem/Vat10" defParticleSpeed="0.03"
             />
 
-            <layer Menu="Dom1,PM10" EN="PM10 (ppmv)" ES="PM10 (ppmv)" style="default-scalar" palette="prec2" name="wrf-chem/PM10" mincolor="0" maxcolor="100" />
+            <layer Menu="Dom1,PM10" EN="PM10 (ug m^-3)" ES="PM10 (ug m^-3)" style="default-scalar" palette="prec2" name="wrf-chem/PM10" mincolor="0.03" maxcolor="0.035" />
 
-            <layer Menu="Dom1,so2" EN="so2 (ppmv)" ES="so2 (ppmv)" style="default-scalar" palette="prec2" name="wrf-chem/so2" mincolor="0" maxcolor="100" />
+            <layer Menu="Dom1,so2" EN="so2 (ppmv)" ES="so2 (ppmv)" style="default-scalar" palette="seq-BlueHeat" name="wrf-chem/so2" mincolor="0.000003" maxcolor="0.0001" />
             
-            <layer Menu="Dom1,nox" EN="nox (ppmv)" ES="nox (ppmv)" style="default-scalar" palette="prec2" name="wrf-chem/NOX" mincolor="0" maxcolor="100" />
+            <layer Menu="Dom1,nox" EN="nox (ppmv)" ES="nox (ppmv)" style="default-scalar" palette="seq-BlueHeat" name="wrf-chem/NOX" mincolor="0.0002" maxcolor="0.009" />
                         
-            <layer Menu="Dom1,relh" EN="Relative humidity" ES="Humedad" name="wrf-chem/RH" style="default-scalar" palette="seq-Blues" mincolor="0" maxcolor="100" />
+            <layer Menu="Dom1,relh" EN="Relative humidity" ES="Humedad" name="wrf-chem/RH" style="default-scalar" palette="seq-Blues" mincolor="0" maxcolor="60" />
             
 	</MainLayers>
                 
