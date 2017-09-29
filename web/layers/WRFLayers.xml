@@ -31,7 +31,7 @@
         <!-- Dominio 1 -->
 	<MainLayers BBOX="-122.25056107685108,7.409418707415154,-74.74943892314892,36.11315809004144" format="image/gif" server="http://132.248.8.238:8080/ncWMS_2015/wms" ncWMStwo="true" >
             
-            <layer Menu="Dom1,Temp2" EN="Temperature at 2 meters." ES="Temperatura en superficie a 2 metros" style="default-scalar" palette="temperatura" name="wrf-chem/T2C" mincolor="0" maxcolor="100" />
+            <layer Menu="Dom1,Temp2" EN="Temperature at 2 meters." ES="Temperatura en superficie a 2 metros" style="default-scalar" palette="temperatura" name="wrf-chem/T2C" mincolor="-10" maxcolor="50" />
             
             <layer Menu="Dom1,Pblh" EN="Planetary boundary layer height" ES="Altura de la capa límite planetaria" style="default-scalar" palette="prec2" name="wrf-chem/PBLH" mincolor="-170" maxcolor="3770" />
 
