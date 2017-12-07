@@ -40,6 +40,7 @@ function setMouseClickOnMap(){
 	});
 }
 
+var resExtent;
 function initOl3(){
 	/*  -------------------- Popup.js -------------------------
 	 * This file contains all the functions related with the Ol3 popup
@@ -80,7 +81,7 @@ function initOl3(){
 	
 	var changeProj;//Indicates if we need to change the projections
 	var defCenter;
-	var resExtent;
+	
 	
 	if(_map_bk_layer === "wms"){
 		//If the default projection is not 4326 then we need to transform 
@@ -89,6 +90,7 @@ function initOl3(){
 			changeProj = true;
 		}else{
 			defCenter= [lon,lat];
+                        resExtent = ol.proj.transform(mapConfig.restrictedExtent.split(",").map(Number), 'EPSG:4326', _map_projection);
 		}
 	}else{
 		if( (_map_bk_layer === "osm") || 
@@ -104,7 +106,7 @@ function initOl3(){
 		defCenter = ol.proj.transform([lon, lat], 'EPSG:4326', _map_projection);
 		resExtent = ol.proj.transform(mapConfig.restrictedExtent.split(",").map(Number), 'EPSG:4326', _map_projection);
 	}
-
+        resExtent = ol.proj.transform(mapConfig.restrictedExtent.split(",").map(Number), 'EPSG:4326', _map_projection);
 	//This control is used to display Lat and Lon when the user is moving the mouse over the map
 	var mousePositionControl = new ol.control.MousePosition({
 		coordinateFormat: ol.coordinate.createStringXY(4),
@@ -126,8 +128,8 @@ function initOl3(){
 		maxZoom: mapConfig.zoomLevels,
 		zoom: mapConfig.zoom,
 		zoomFactor: mapConfig.zoomFactor,
-		maxResolution: mapConfig.maxResolution
-//		extent: resExtent  // Not working
+		maxResolution: mapConfig.maxResolution,
+		extent: resExtent  // Not working
 	});
 
  	map = new ol.Map({

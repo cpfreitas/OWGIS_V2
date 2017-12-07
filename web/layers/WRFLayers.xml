@@ -8,11 +8,10 @@
 		<Menu ID="Pblh" EN="PBLH" ES="PBLH"/>
 		<Menu ID="co" EN="CO" ES="CO"/> 
 		<Menu ID="o3" EN="O3" ES="O3"/>
-		<Menu ID="PM10" EN="Hourly Precipitation " ES="Precipitacion Horaria"/>
+		<Menu ID="PM10" EN="PM10" ES="PM10"/>
                 
-                <Menu ID="so2" EN="Cloud Cover IR" ES="Cobertura Nubosa IR" />
-                <Menu ID="nox" EN="Evaporation" ES="Evaporacion" />
-                <Menu ID="relh" EN="Relative humidity" ES="Humedad" />
+                <Menu ID="so2" EN="SO2" ES="SO2" />
+                <Menu ID="nox" EN="NOX" ES="NOX" />
 		<!-- Tais menu that are available to display entries IOA OWGIS-->
 	</Menus>
 
@@ -33,7 +32,7 @@
             
             <layer Menu="Dom1,VtoSup10" EN="Wind speed at 10 meters" ES="Viento a 10 metros" 
                     style="default-scalar" palette="wind2" name="wrf-chem/Uat10:Vat10-mag"
-                    overlaystreamlines="wrf-chem/Uat10:wrf-chem/Vat10" defParticleSpeed="0.03"
+                    overlaystreamlines="wrf-chem/Uat10:wrf-chem/Vat10" defParticleSpeed="0.03"  mincolor="0" maxcolor="250" 
             />
 
             <layer Menu="Dom1,Pblh" EN="Planetary boundary layer height" ES="Altura de la capa límite planetaria" style="default-scalar" palette="prec2" name="wrf-chem/PBLH" mincolor="-170" maxcolor="3770" />
@@ -47,8 +46,6 @@
             <layer Menu="Dom1,so2" EN="so2 (ppmv)" ES="so2 (ppmv)" style="default-scalar" palette="seq-BlueHeat" name="wrf-chem/so2" mincolor="0.000003" maxcolor="0.0001" />
             
             <layer Menu="Dom1,nox" EN="nox (ppmv)" ES="nox (ppmv)" style="default-scalar" palette="seq-BlueHeat" name="wrf-chem/NOX" mincolor="0.0002" maxcolor="0.009" />
-                        
-            <layer Menu="Dom1,relh" EN="Relative humidity" ES="Humedad" name="wrf-chem/RH" style="default-scalar" palette="seq-Blues" mincolor="0" maxcolor="60" />
             
 	</MainLayers>
                 
