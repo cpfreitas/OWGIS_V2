@@ -96,4 +96,297 @@ owgis.interf.loadingatmap = function(loading,percentage,extraText){
  * @returns {undefined}
  */
 function modifyInterface(){
+    if(layerDetails.isParticle != "false"){
+        document.getElementById('estaciones_charts').style.display = "block";
+        $('#estaciones_charts').draggable();
+        
+        $('#estaciones_charts').resizable({
+                                    //alsoResize: ".modal-dialog",
+                                    minHeight: 500,
+                                    minWidth: 600,
+                                    resize: function( event, ui ) {
+                                        if (typeof $("#forecastvsreportHighcharts").highcharts() != 'undefined'){
+                                            $("#forecastvsreportHighcharts").highcharts().setSize(document.getElementById('v-pills-tabContent').offsetWidth-30, document.getElementById('estaciones_charts').offsetHeight-30, doAnimation = true);
+                                        }
+                                    }
+                                });
+        
+        var ajaxCan;
+        var date = new Date();
+        var n = date.toISOString().slice(0,10);
+        nn = '2017-10-23';
+        $.ajax({
+                url: "http://10.20.12.147:9999/WebServiceContingencia/API/contingencia/"+layerDetails.isParticle+"/CCA/"+nn+"/00:00",
+                //url: "http://10.20.12.147:9999/WebServiceContingencia/API/contingencia/contotres/CCA/"+date.toISOString().slice(0,10)+"/00:00",
+                async: true,
+                //cache: false,
+                crossDomain : true,
+                type: "GET",
+                dataType: 'json',
+                success: function(data) {
+
+                          ajaxCan = true;
+                          
+                          report = [];
+                          forecast = [];
+                          alldates = [];
+                          
+                          ellength = data.report.length;
+                          forecastlen = data.forecast.length;
+                          
+                        day1=new Date('2017-10-23');
+                        //day1=new Date();
+                        day1.setHours(0,0,0,0);
+                        eday = (day1).addDays(2);
+                        var dateArray = getDates(day1,eday);
+                        
+                        for(var i=0;i<ellength;i++){
+                            fechaRd = new Date(data.report[i][0]);
+                            if( i < forecastlen ){
+                                fechaRdi = new Date(data.forecast[i][0]);
+                            }
+                            for(var j=0;j<dateArray.length;j++){
+                                
+                                if(fechaRd.getTime()  ===  dateArray[j].getTime()){
+                                    report[j] = data.report[i][1];
+                                } else if(report[j] != null) {
+                                    //
+                                } else {
+                                    report[j] = null;
+                                }
+                                if( i < forecastlen ){
+                                    if(fechaRdi.getTime() === dateArray[j].getTime() ){
+                                        forecast[j] = data.forecast[i][1];
+                                    } else if(forecast[j] != null) {
+                                        //
+                                    } else {
+                                        forecast[j] = null;
+                                    }
+                                }
+                            }
+                        }
+                          
+                        Highcharts.chart('forecastvsreportHighcharts', {
+                            chart: {
+                                width: document.getElementById('v-pills-tabContent').offsetWidth-30,
+                                height: document.getElementById('estaciones_charts').offsetHeight-60
+                            },
+                            title: {
+                              text: 'Forecast VS Report'
+                            },
+                            subtitle: {
+                                text: 'Particle: '+layerDetails.isParticle+', data from CCA'
+                            },
+                            xAxis: {
+                                categories: dateArray,
+                                //crosshair: true,
+                                labels: {
+                                    formatter: function () {
+                                        return this.value.getDate()+'/'+this.value.getMonth()+'/'+this.value.getFullYear()+' '+this.value.getHours()+":00";
+                                    }
+                                }
+                                
+                            },
+                            yAxis: [
+                                { // Primary yAxis
+                                    labels: {
+                                        //format: '{value}°C',
+                                        
+                                    },
+                                    title: {
+                                        text: 'concentracion de particulas',
+                                        
+                                    }
+
+                                }
+                            ],
+                            tooltip: {
+                                    shared: true
+                                    //pointFormat: "{point.y:.2f} "
+                            },
+                            series: [{
+                                    name: 'Report',
+                                    type: 'spline',
+                                    data: report,
+                                    dashStyle: 'shortdot'
+
+                                }, {
+                                    name: 'Forecast',
+                                    type: 'spline',
+                                    data: forecast,
+                                }]
+                            }
+                        );
+
+                        },
+                        error: function(ex) {
+                          console.log(ex);
+                          console.log('NOT!');
+                          ajaxCan = false; 
+                        }
+                      });
+                      
+                        
+                      if(ajaxCan){
+                        if(mobile){
+                            document.getElementById("forecastvsreportHighcharts").style.display = 'block';
+                        }
+                      }
+        
+        
+    }
+}
+
+function changeEstTabContent(IDEST){
+    allEsts = document.getElementById('v-pills-tab').getElementsByTagName("li");
+    var arrayLength = allEsts.length;
+    for (var i = 0; i < arrayLength; i++) {
+        allEsts[i].className = "";
+    }
+    document.getElementById('v-pills-'+IDEST+'-tab').parentElement.className = "active"
+    //document.getElementById('forecastvsreportHighcharts').innerHTML = " est: "+IDEST;
+    
+    var ajaxCan;
+        var date = new Date();
+        var n = date.toISOString().slice(0,10);
+        nn = '2017-10-23';
+        $.ajax({
+                url: "http://10.20.12.147:9999/WebServiceContingencia/API/contingencia/"+layerDetails.isParticle+"/"+IDEST+"/"+nn+"/00:00",
+                //url: "http://10.20.12.147:9999/WebServiceContingencia/API/contingencia/otres/CCA/"+date.toISOString().slice(0,10)+"/00:00",
+                async: true,
+                //cache: false,
+                crossDomain : true,
+                type: "GET",
+                dataType: 'json',
+                success: function(data) {
+
+                          ajaxCan = true;
+                          
+                          report = [];
+                          forecast = [];
+                          alldates = [];
+                          
+                          ellength = data.report.length;
+                          forecastlen = data.forecast.length;
+                          
+                        day1=new Date('2017-10-23');
+                        //day1=new Date();
+                        day1.setHours(0,0,0,0);
+                        eday = (day1).addDays(2);
+                        var dateArray = getDates(day1,eday);
+                        
+                        for(var i=0;i<ellength;i++){
+                            fechaRd = new Date(data.report[i][0]);
+                            if( i < forecastlen ){
+                                fechaRdi = new Date(data.forecast[i][0]);
+                            }
+                            for(var j=0;j<dateArray.length;j++){
+                                
+                                if(fechaRd.getTime()  ===  dateArray[j].getTime()){
+                                    report[j] = data.report[i][1];
+                                } else if(report[j] != null) {
+                                    //
+                                } else {
+                                    report[j] = null;
+                                }
+                                if( i < forecastlen ){
+                                    if(fechaRdi.getTime() === dateArray[j].getTime() ){
+                                        forecast[j] = data.forecast[i][1];
+                                    } else if(forecast[j] != null) {
+                                        //
+                                    } else {
+                                        forecast[j] = null;
+                                    }
+                                }
+                            }
+                        }
+                          
+                        Highcharts.chart('forecastvsreportHighcharts', {
+                            chart: {
+                                width: document.getElementById('v-pills-tabContent').offsetWidth-30,
+                                height: document.getElementById('estaciones_charts').offsetHeight-60
+                            },
+                            title: {
+                              text: 'Forecast VS Report'
+                            },
+                            subtitle: {
+                                text: 'Particle: '+layerDetails.isParticle+', data from '+IDEST
+                            },
+                            xAxis: {
+                                categories: dateArray,
+                                //crosshair: true,
+                                labels: {
+                                    formatter: function () {
+                                        return this.value.getDate()+'/'+this.value.getMonth()+'/'+this.value.getFullYear()+' '+this.value.getHours()+":00";
+                                    }
+                                }
+                                
+                            },
+                            yAxis: [
+                                { // Primary yAxis
+                                    labels: {
+                                        //format: '{value}°C',
+                                        
+                                    },
+                                    title: {
+                                        text: 'concentracion de particulas',
+                                        
+                                    }
+
+                                }
+                            ],
+                            tooltip: {
+                                    shared: true
+                                    //pointFormat: "{point.y:.2f} "
+                            },
+                            series: [{
+                                    name: 'Report',
+                                    type: 'spline',
+                                    data: report,
+                                    dashStyle: 'shortdot'
+
+                                }, {
+                                    name: 'Forecast',
+                                    type: 'spline',
+                                    data: forecast,
+                                }]
+                            }
+                        );
+
+                        },
+                        error: function(ex) {
+                          console.log(ex);
+                          console.log('NOT!');
+                          ajaxCan = false; 
+                        }
+                      });
+                      
+                        
+                      if(ajaxCan){
+                        if(mobile){
+                            document.getElementById("forecastvsreportHighcharts").style.display = 'block';
+                        }
+                      }
+}
+
+Date.prototype.addDays = function(days) {
+       var dat = new Date(this.valueOf())
+       dat.setDate(dat.getDate() + days);
+       return dat;
+}
+
+Date.prototype.addHours= function(h){
+    var copiedDate = new Date(this.getTime());
+    copiedDate.setHours(copiedDate.getHours()+h);
+    return copiedDate;
+}
+
+function getDates(startDate, stopDate) {
+      var dateArray = new Array();
+      var currentDate = startDate;
+      while (currentDate <= stopDate) {
+        dateArray.push(currentDate)
+        currentDate = currentDate.addHours(1);
+      }
+      return dateArray;
 }

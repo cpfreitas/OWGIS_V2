@@ -608,6 +608,9 @@ public class LayerMenuManagerSingleton {
                 
                 String aboveMaxColor = layerConf.getAttributeValue("aboveMaxColor") != null
 				? layerConf.getAttributeValue("aboveMaxColor") : layer.getAboveMaxColor();
+                
+                String isParticle = layerConf.getAttributeValue("isParticle") != null
+				? layerConf.getAttributeValue("isParticle") : layer.getIsParticle();
 		
 		/*
 		String[] cql_cols = null;
@@ -619,7 +622,7 @@ public class LayerMenuManagerSingleton {
 		Layer newLayer = new Layer(bbox, style, format, name, layer.getDisplayNames(),
 				proj, layer.getIdLayer(), server, width, height, featureInfo,
 				tiled, layer.isDisplayTitle(), layer.getLayout(), vectorLayer, palette, boolnetCDF,
-				max_time_range, boolJsonp,overlayStreamlines,belowMinColor, aboveMaxColor, defParticleSpeed);
+				max_time_range, boolJsonp,overlayStreamlines,belowMinColor, aboveMaxColor, defParticleSpeed, isParticle);
 		
 		newLayer.setMinColor(minColor);
                 //newLayer.setBelowMinColor(belowMinColor);

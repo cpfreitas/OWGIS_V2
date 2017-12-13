@@ -71,6 +71,31 @@ This is the main jsp file that forms the html webpage. It contains the skeleton 
 					owgisMain();
 				});
 		</script>
+                                
+                <!-- These divs are required for highcharts exclusively custom for this project -->
+                <div id="estaciones_charts" class="container">
+                    <div class="row">
+                        <div class="col-md-3">
+                          <!--div class="nav flex-column nav-pills nav-stacked" id="v-pills-tab" aria-orientation="vertical"-->
+                              <ul  class="nav flex-column nav-pills nav-stacked" id="v-pills-tab" aria-orientation="vertical" role="tablist">
+                                  <li role="presentation" class="active"><a class="nav-link" id="v-pills-CCA-tab" href="#" role="tab" aria-controls="v-pills-CCA" aria-selected="true" onclick="changeEstTabContent('CCA')">CCA</a></li>
+                                <li role="presentation"><a class="nav-link" id="v-pills-MGH-tab" href="#" role="tab" aria-controls="v-pills-MGH" aria-selected="false" onclick="changeEstTabContent('MGH')">MGH</a></li>
+                                <li role="presentation"><a class="nav-link" id="v-pills-TAH-tab" href="#" role="tab" aria-controls="v-pills-TAH" aria-selected="false" onclick="changeEstTabContent('TAH')">TAH</a></li>
+                                <li role="presentation"><a class="nav-link" id="v-pills-ACO-tab" href="#" role="tab" aria-controls="v-pills-ACO" aria-selected="false" onclick="changeEstTabContent('ACO')">ACO</a></li>
+                              </ul>
+                          <!--/div-->
+                        </div>
+                        <div class="col-md-9" style="padding:0 !important;">
+                          <div class="tab-content" id="v-pills-tabContent">
+                            <div class="tab-pane fade in active" id="v-pills-est" role="tabpanel" >
+                                <div id="forecastvsreportHighcharts"></div>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                
                 <!-- These divs are required for highcharts -->
                 <div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" id="showVertProf">
                     <div class="modal-dialog">

@@ -82,6 +82,8 @@ public class Layer {
 	private boolean zaxis;// Indicates if the layer has zaxis values
 	private boolean multipleDates;// Indicates if the layer has multiple dates
 
+        private String isParticle;//Stores if it is a particle or not
+
 	// ---- To bypass routers which block local address for DNS Rebinding Attacks
 	private String localAddress;// Indicate the local addresss of the server (to request layer details)
 	
@@ -160,6 +162,7 @@ public class Layer {
 		this.cql_cols = "";// By default the layers doe not have cql columns
 		this.overlayStreamlines = "";
 		this.defParticleSpeed = 1.0f;//By default we don't change it
+                this.isParticle="false";//Stores if it is a particle or not
 	}
 	/**
 	 *
@@ -215,7 +218,7 @@ public class Layer {
 			boolean jsonp,
 			String overlayStreamlines, 
                         String belowMinColor, String aboveMaxColor,
-			float defParticleSpeed) {
+			float defParticleSpeed, String isParticle) {
 		
 		this.bbox = bbox;
 		this.style = style;
@@ -255,6 +258,7 @@ public class Layer {
 		this.localAddress = null;
                 this.belowMinColor = belowMinColor;
                 this.aboveMaxColor = aboveMaxColor;
+                this.isParticle = isParticle;
 	}
 	//Geters
 	
@@ -312,6 +316,8 @@ public class Layer {
 					this.multipleDates = true;
 				}
 			}
+                        
+                        layerDetails.accumulate("isParticle",isParticle);
 			
 			layerDetails.accumulate("server", server);
 			layerDetails.accumulate("name", name);
@@ -642,6 +648,10 @@ public class Layer {
 	public void setZaxis(boolean zaxis) {
 		this.zaxis = zaxis;
 	}
+        
+        public void setIsParticle(String isParticle) {
+		this.isParticle = isParticle;
+	}
 
 	public boolean isMultipleDates() {
 		return multipleDates;
@@ -669,6 +679,10 @@ public class Layer {
         
         public String getAboveMaxColor() {
 		return aboveMaxColor;
+	}
+        
+        public String getIsParticle() {
+		return isParticle;
 	}
 
 	public void setLocalAddress(String localAddress) {
