@@ -97,7 +97,45 @@ owgis.interf.loadingatmap = function(loading,percentage,extraText){
  */
 function modifyInterface(){
     if(layerDetails.isParticle != "false"){
+        
+        
+        //add to "#v-pills-tab"
+        //'AJM', 'MGH', 'CCA', 'SFE', 'UAX', 'CUA', 'NEZ', 'CAM','LPR','SJA','IZT','SAG','TAH','ATI','FAC','UIZ','MER','PED','TLA','XAL','CHO','BJU'
+        var estaciones= ['AJM', 'MGH', 'CCA', 'SFE', 'UAX', 'CUA', 'NEZ', 'CAM','LPR','SJA','IZT','SAG','TAH','ATI','FAC','UIZ','MER','PED','TLA','XAL','CHO','BJU'];
+        
+        for( var i=0; i<estaciones.length; i++ ){
+            
+            //create new li element like:
+            // <li role="presentation"><a class="nav-link" id="v-pills-CUA-tab" href="#" role="tab" aria-controls="v-pills-CUA" aria-selected="false" onclick="changeEstTabContent('CUA')">CUA</a></li>
+            var newNumberListItem = document.createElement("li");
+            newNumberListItem.setAttribute("role", "presentation");
+            var newLink = document.createElement("a");
+            newLink.className = "nav-link";
+            newLink.href = "#";
+            newLink.setAttribute("id", "v-pills-"+estaciones[i]+"-tab");
+            newLink.setAttribute("role", "tab");
+            newLink.setAttribute("aria-controls", "v-pills-"+estaciones[i] );
+            newLink.setAttribute("onclick", "changeEstTabContent('"+estaciones[i]+"')" );
+            //newLink.onclick = function() { changeEstTabContent(estaciones[i]); } ;
+            if( i ==0 ){
+                // class="active" // aria-selected="true"
+                newNumberListItem.className = "active";
+                newLink.setAttribute("aria-selected", "true");
+            } else {
+                newLink.setAttribute("aria-selected", "false");
+            }
+            //create new text node
+            var numberListValue = document.createTextNode(estaciones[i]);
+            //add text node to li element
+            newLink.appendChild(numberListValue);
+            newNumberListItem.appendChild(newLink);
+            //add new list element built in previous steps to unordered list
+            //called numberList
+            document.getElementById("v-pills-tab").appendChild(newNumberListItem);
+        }
+        
         document.getElementById('estaciones_charts').style.display = "block";
+        document.getElementById('v-pills-tab').style.height = document.getElementById('estaciones_charts').offsetHeight-30+'px' ;
         $('#estaciones_charts').draggable();
         
         $('#estaciones_charts').resizable({
@@ -108,6 +146,7 @@ function modifyInterface(){
                                         if (typeof $("#forecastvsreportHighcharts").highcharts() != 'undefined'){
                                             $("#forecastvsreportHighcharts").highcharts().setSize(document.getElementById('v-pills-tabContent').offsetWidth-30, document.getElementById('estaciones_charts').offsetHeight-30, doAnimation = true);
                                         }
+                                        document.getElementById('v-pills-tab').style.height = document.getElementById('estaciones_charts').offsetHeight-30+'px';
                                     }
                                 });
         
@@ -116,7 +155,7 @@ function modifyInterface(){
         var n = date.toISOString().slice(0,10);
         nn = '2017-10-23';
         $.ajax({
-                url: "http://10.20.12.147:9999/WebServiceContingencia/API/contingencia/"+layerDetails.isParticle+"/CCA/"+nn+"/00:00",
+                url: "http://10.20.12.147:9999/WebServiceContingencia/API/contingencia/"+layerDetails.isParticle+"/"+estaciones[0]+"/"+n+"/00:00",
                 //url: "http://10.20.12.147:9999/WebServiceContingencia/API/contingencia/contotres/CCA/"+date.toISOString().slice(0,10)+"/00:00",
                 async: true,
                 //cache: false,
@@ -134,11 +173,13 @@ function modifyInterface(){
                           ellength = data.report.length;
                           forecastlen = data.forecast.length;
                           
-                        day1=new Date('2017-10-23');
-                        //day1=new Date();
+                        //day1=new Date('2017-10-23');
+                        day1=new Date();
                         day1.setHours(0,0,0,0);
-                        eday = (day1).addDays(2);
-                        var dateArray = getDates(day1,eday);
+                        day2 = (day1).addDays(-1);
+                        //eday = (day1).addDays(2);
+                        eday = (day1).addDays(1);
+                        var dateArray = getDates(day2,eday);
                         
                         for(var i=0;i<ellength;i++){
                             fechaRd = new Date(data.report[i][0]);
@@ -175,7 +216,7 @@ function modifyInterface(){
                               text: 'Forecast VS Report'
                             },
                             subtitle: {
-                                text: 'Particle: '+layerDetails.isParticle+', data from CCA'
+                                text: 'Particle: '+layerDetails.isParticle+', data from '+estaciones[0]
                             },
                             xAxis: {
                                 categories: dateArray,
@@ -238,6 +279,7 @@ function modifyInterface(){
 }
 
 function changeEstTabContent(IDEST){
+    console.log(IDEST);
     allEsts = document.getElementById('v-pills-tab').getElementsByTagName("li");
     var arrayLength = allEsts.length;
     for (var i = 0; i < arrayLength; i++) {
@@ -251,7 +293,7 @@ function changeEstTabContent(IDEST){
         var n = date.toISOString().slice(0,10);
         nn = '2017-10-23';
         $.ajax({
-                url: "http://10.20.12.147:9999/WebServiceContingencia/API/contingencia/"+layerDetails.isParticle+"/"+IDEST+"/"+nn+"/00:00",
+                url: "http://10.20.12.147:9999/WebServiceContingencia/API/contingencia/"+layerDetails.isParticle+"/"+IDEST+"/"+n+"/00:00",
                 //url: "http://10.20.12.147:9999/WebServiceContingencia/API/contingencia/otres/CCA/"+date.toISOString().slice(0,10)+"/00:00",
                 async: true,
                 //cache: false,
@@ -269,11 +311,13 @@ function changeEstTabContent(IDEST){
                           ellength = data.report.length;
                           forecastlen = data.forecast.length;
                           
-                        day1=new Date('2017-10-23');
-                        //day1=new Date();
+                        //day1=new Date('2017-10-23');
+                        day1=new Date();
                         day1.setHours(0,0,0,0);
-                        eday = (day1).addDays(2);
-                        var dateArray = getDates(day1,eday);
+                        day2 = (day1).addDays(-1);
+                        //eday = (day1).addDays(2);
+                        eday = (day1).addDays(1);
+                        var dateArray = getDates(day2,eday);
                         
                         for(var i=0;i<ellength;i++){
                             fechaRd = new Date(data.report[i][0]);

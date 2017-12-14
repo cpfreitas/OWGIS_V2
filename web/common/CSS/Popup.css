@@ -172,13 +172,12 @@ h5#modalLabelVertProf, h5#modalLabelTimeSeries {
     border-radius: 8px; 
     display: none;
 }
-
 .tab-content>.tab-pane>p{
     color: #333333;
+}/*
+#estaciones_charts>div, #est_list_container, #v-pills-tab{
+    height: inherit;
+}*/
+#v-pills-tab{
+    overflow-y: scroll;
 }
-/*
-#forecastvsreportHighcharts {
-    width:100% !important;
-    height:100% !important;
-}
-*/

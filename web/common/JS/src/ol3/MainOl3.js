@@ -94,7 +94,7 @@ function initOl3(){
 			changeProj = true;
 		}else{
 			defCenter= [lon,lat];
-                        resExtent = ol.proj.transform(mapConfig.restrictedExtent.split(",").map(Number), 'EPSG:4326', _map_projection);
+                        resExtent = ol.proj.transformExtent(mapConfig.restrictedExtent.split(",").map(Number), 'EPSG:4326', _map_projection);
 		}
 	}else{
 		if( (_map_bk_layer === "osm") || 
@@ -108,9 +108,9 @@ function initOl3(){
 	
 	if(changeProj){
 		defCenter = ol.proj.transform([lon, lat], 'EPSG:4326', _map_projection);
-		resExtent = ol.proj.transform(mapConfig.restrictedExtent.split(",").map(Number), 'EPSG:4326', _map_projection);
+		resExtent = ol.proj.transformExtent(mapConfig.restrictedExtent.split(",").map(Number), 'EPSG:4326', _map_projection);
 	}
-        resExtent = ol.proj.transform(mapConfig.restrictedExtent.split(",").map(Number), 'EPSG:4326', _map_projection);
+        resExtent = ol.proj.transformExtent(mapConfig.restrictedExtent.split(",").map(Number), 'EPSG:4326', _map_projection);
 	//This control is used to display Lat and Lon when the user is moving the mouse over the map
 	var mousePositionControl = new ol.control.MousePosition({
 		coordinateFormat: ol.coordinate.createStringXY(4),
@@ -139,12 +139,14 @@ function initOl3(){
 		maxResolution: mapConfig.maxResolution,
 		extent: resExtent  // Not working
 	});
+        
+        //console.log(resExtent);
 
  	map = new ol.Map({
 		controls:ol.control.defaults().extend([mousePositionControl, scaleLineControl]),
 		overlays: [ol_popup], //Overlay used for popup
 		target: 'map', // Define 'div' that contains the map
-        renderer: 'canvas', // ['canvas','dom','webgl']
+                renderer: 'canvas', // ['canvas','dom','webgl']
 		logo: false,
 		view: ol3view
         });
@@ -213,6 +215,9 @@ function initOl3(){
             else
                 map.once('change:ready', whenMapIsReady.bind(null, callback));
         }
+        
+        map.getView().fit(resExtent, map.getSize()); 
+
         
 }
 

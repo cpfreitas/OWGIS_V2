@@ -3,6 +3,7 @@ goog.require('owgis.mobile');
 
 owgis.ncwms.zaxis.globcounter = 0; //index of layerDetails.zaxis.values[owgis.ncwms.zaxis.globcounter]
 var zAxis_span_visible = false; // Indicates if the span of the 'elevations' is being displayed
+//if(typeof layerDetails.zaxis != "undefined"){ layerDetails.zaxis.values.reverse();}
 
 /**
  this function checks to see if the layer has elevation or not
@@ -55,7 +56,7 @@ owgis.ncwms.zaxis.createElevationSelector = function createElevationSelector(){
     //Verify we have at least one z-axis
 	if(noElevation()) return;//Do not create anything 
 
-	elev_counter = layerDetails.zaxis.values.length;
+	elev_counter = layerDetails.zaxis.values.length;        
 	
     var totByPage = 10;//Total number of element for each 'page'
 		
@@ -84,14 +85,14 @@ owgis.ncwms.zaxis.createElevationSelector = function createElevationSelector(){
             if(i === owgis.ncwms.zaxis.globcounter)
             {
                 inner_text += "<input id='zaxisCheckbox"+i+"' onclick='changeElev(" + i + ")' type='radio' name='elev_select' value='" 
-                + layerDetails.zaxis.values[i] + "' checked> " + layerDetails.zaxis.values[i] + 
+                + layerDetails.zaxis.values[i] + "' checked> " + parseFloat(Math.round(layerDetails.zaxis.values[i] * 100) / 100).toFixed(2) + 
                 "&nbsp;&nbsp; " + layerDetails.zaxis.units + "<BR/>";
                 selectedLink = page;
             }
             else//all other are just printed without being checked. 
             {
                 inner_text += "<input id='zaxisCheckbox"+i+"' onclick='changeElev(" + i + ")' type='radio' name='elev_select' value='" + 
-                layerDetails.zaxis.values[i] + "'> " + layerDetails.zaxis.values[i] + 
+                layerDetails.zaxis.values[i] + "'> " + parseFloat(Math.round(layerDetails.zaxis.values[i] * 100) / 100).toFixed(2) + 
                 "&nbsp;&nbsp;" + layerDetails.zaxis.units +"<BR/>";
             }
             i++;
@@ -345,5 +346,5 @@ function getZaxisText(){
 		return  depthText; 
     }
     else
-        return "UNDEFINED";
+        return depthText;
 }
