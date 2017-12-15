@@ -184,15 +184,19 @@ function createChartFVSR(id_est){
     var ajaxCan;
     var date = new Date();
     var n = date.toISOString().slice(0,10);
-
+    hr = addZero(date.getHours())+':'+addZero(date.getMinutes());
+    console.log(hr);
+    elurl = "http://132.248.8.98:12999/WebServiceContingencia/API/contingencia/"+layerDetails.isParticle+"/"+id_est+"/"+n+"/"+hr;
+    console.log(elurl);
     $.ajax({
-                url: "http://10.20.12.147:9999/WebServiceContingencia/API/contingencia/"+layerDetails.isParticle+"/"+id_est+"/"+n+"/00:00",
+                url: elurl,
                 async: true,
                 crossDomain : true,
                 type: "GET",
                 dataType: 'json',
                 success: function(data) {
                     
+                    console.log(data);
                           ajaxCan = true;
                           
                           report = [];
@@ -202,8 +206,8 @@ function createChartFVSR(id_est){
                           ellength = data.report.length;
                           forecastlen = data.forecast.length;
                           
-                        day1=new Date();
-                        day1.setHours(0,0,0,0);
+                        day1=date;
+                        day1.setHours(hr.slice(0,2),0,0,0);
                         day2 = (day1).addDays(-1);
                         eday = (day1).addDays(1);
                         var dateArray = getDates(day2,eday);
@@ -226,7 +230,7 @@ function createChartFVSR(id_est){
                             for(var j=0;j<dateArray.length;j++){
                                 
                                     if(fechaRdi.getTime() === dateArray[j].getTime() ){
-                                        forecast[j] = data.forecast[i][1];
+                                        if(data.forecast[i][1] != -1){ forecast[j] = data.forecast[i][1]; }
                                     } else if(forecast[j] != null) {
                                         //
                                     } else {
@@ -298,4 +302,11 @@ function createChartFVSR(id_est){
                           ajaxCan = false; 
                         }
                       });
+}
+
+function addZero(i) {
+    if (i < 10) {
+        i = "0" + i;
+    }
+    return i;
 }

@@ -158,7 +158,7 @@ h5#modalLabelVertProf, h5#modalLabelTimeSeries {
 
 #estaciones_charts{
     position: fixed;
-    width: 30%;
+    width: 90%;
     height: 30%;
     bottom: 45px;
     left: 35px;
