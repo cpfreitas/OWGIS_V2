@@ -96,15 +96,11 @@ owgis.interf.loadingatmap = function(loading,percentage,extraText){
  * @returns {undefined}
  */
 function modifyInterface(){
-    if(layerDetails.isParticle != "false"){
-        
-        
+    if(layerDetails.isParticle != "false" && !mobile){
         //add to "#v-pills-tab"
-        //'AJM', 'MGH', 'CCA', 'SFE', 'UAX', 'CUA', 'NEZ', 'CAM','LPR','SJA','IZT','SAG','TAH','ATI','FAC','UIZ','MER','PED','TLA','XAL','CHO','BJU'
         var estaciones= ['AJM', 'MGH', 'CCA', 'SFE', 'UAX', 'CUA', 'NEZ', 'CAM','LPR','SJA','IZT','SAG','TAH','ATI','FAC','UIZ','MER','PED','TLA','XAL','CHO','BJU'];
         
         for( var i=0; i<estaciones.length; i++ ){
-            
             //create new li element like:
             // <li role="presentation"><a class="nav-link" id="v-pills-CUA-tab" href="#" role="tab" aria-controls="v-pills-CUA" aria-selected="false" onclick="changeEstTabContent('CUA')">CUA</a></li>
             var newNumberListItem = document.createElement("li");
@@ -116,7 +112,6 @@ function modifyInterface(){
             newLink.setAttribute("role", "tab");
             newLink.setAttribute("aria-controls", "v-pills-"+estaciones[i] );
             newLink.setAttribute("onclick", "changeEstTabContent('"+estaciones[i]+"')" );
-            //newLink.onclick = function() { changeEstTabContent(estaciones[i]); } ;
             if( i ==0 ){
                 // class="active" // aria-selected="true"
                 newNumberListItem.className = "active";
@@ -129,8 +124,7 @@ function modifyInterface(){
             //add text node to li element
             newLink.appendChild(numberListValue);
             newNumberListItem.appendChild(newLink);
-            //add new list element built in previous steps to unordered list
-            //called numberList
+            //add new list element built in previous steps to unordered list called numberList
             document.getElementById("v-pills-tab").appendChild(newNumberListItem);
         }
         
@@ -139,7 +133,6 @@ function modifyInterface(){
         $('#estaciones_charts').draggable();
         
         $('#estaciones_charts').resizable({
-                                    //alsoResize: ".modal-dialog",
                                     minHeight: 500,
                                     minWidth: 600,
                                     resize: function( event, ui ) {
@@ -149,268 +142,20 @@ function modifyInterface(){
                                         document.getElementById('v-pills-tab').style.height = document.getElementById('estaciones_charts').offsetHeight-30+'px';
                                     }
                                 });
-        
-        var ajaxCan;
-        var date = new Date();
-        var n = date.toISOString().slice(0,10);
-        nn = '2017-10-23';
-        $.ajax({
-                url: "http://10.20.12.147:9999/WebServiceContingencia/API/contingencia/"+layerDetails.isParticle+"/"+estaciones[0]+"/"+n+"/00:00",
-                //url: "http://10.20.12.147:9999/WebServiceContingencia/API/contingencia/contotres/CCA/"+date.toISOString().slice(0,10)+"/00:00",
-                async: true,
-                //cache: false,
-                crossDomain : true,
-                type: "GET",
-                dataType: 'json',
-                success: function(data) {
-
-                          ajaxCan = true;
-                          
-                          report = [];
-                          forecast = [];
-                          alldates = [];
-                          
-                          ellength = data.report.length;
-                          forecastlen = data.forecast.length;
-                          
-                        //day1=new Date('2017-10-23');
-                        day1=new Date();
-                        day1.setHours(0,0,0,0);
-                        day2 = (day1).addDays(-1);
-                        //eday = (day1).addDays(2);
-                        eday = (day1).addDays(1);
-                        var dateArray = getDates(day2,eday);
-                        
-                        for(var i=0;i<ellength;i++){
-                            fechaRd = new Date(data.report[i][0]);
-                            if( i < forecastlen ){
-                                fechaRdi = new Date(data.forecast[i][0]);
-                            }
-                            for(var j=0;j<dateArray.length;j++){
                                 
-                                if(fechaRd.getTime()  ===  dateArray[j].getTime()){
-                                    report[j] = data.report[i][1];
-                                } else if(report[j] != null) {
-                                    //
-                                } else {
-                                    report[j] = null;
-                                }
-                                if( i < forecastlen ){
-                                    if(fechaRdi.getTime() === dateArray[j].getTime() ){
-                                        forecast[j] = data.forecast[i][1];
-                                    } else if(forecast[j] != null) {
-                                        //
-                                    } else {
-                                        forecast[j] = null;
-                                    }
-                                }
-                            }
-                        }
-                          
-                        Highcharts.chart('forecastvsreportHighcharts', {
-                            chart: {
-                                width: document.getElementById('v-pills-tabContent').offsetWidth-30,
-                                height: document.getElementById('estaciones_charts').offsetHeight-60
-                            },
-                            title: {
-                              text: 'Forecast VS Report'
-                            },
-                            subtitle: {
-                                text: 'Particle: '+layerDetails.isParticle+', data from '+estaciones[0]
-                            },
-                            xAxis: {
-                                categories: dateArray,
-                                //crosshair: true,
-                                labels: {
-                                    formatter: function () {
-                                        return this.value.getDate()+'/'+this.value.getMonth()+'/'+this.value.getFullYear()+' '+this.value.getHours()+":00";
-                                    }
-                                }
-                                
-                            },
-                            yAxis: [
-                                { // Primary yAxis
-                                    labels: {
-                                        //format: '{value}°C',
-                                        
-                                    },
-                                    title: {
-                                        text: 'concentracion de particulas',
-                                        
-                                    }
-
-                                }
-                            ],
-                            tooltip: {
-                                    shared: true
-                                    //pointFormat: "{point.y:.2f} "
-                            },
-                            series: [{
-                                    name: 'Report',
-                                    type: 'spline',
-                                    data: report,
-                                    dashStyle: 'shortdot'
-
-                                }, {
-                                    name: 'Forecast',
-                                    type: 'spline',
-                                    data: forecast,
-                                }]
-                            }
-                        );
-
-                        },
-                        error: function(ex) {
-                          console.log(ex);
-                          console.log('NOT!');
-                          ajaxCan = false; 
-                        }
-                      });
-                      
-                        
-                      if(ajaxCan){
-                        if(mobile){
-                            document.getElementById("forecastvsreportHighcharts").style.display = 'block';
-                        }
-                      }
-        
-        
+        createChartFVSR(estaciones[0]);                  
     }
 }
 
 function changeEstTabContent(IDEST){
-    console.log(IDEST);
+    //console.log(IDEST);
     allEsts = document.getElementById('v-pills-tab').getElementsByTagName("li");
     var arrayLength = allEsts.length;
     for (var i = 0; i < arrayLength; i++) {
         allEsts[i].className = "";
     }
     document.getElementById('v-pills-'+IDEST+'-tab').parentElement.className = "active"
-    //document.getElementById('forecastvsreportHighcharts').innerHTML = " est: "+IDEST;
-    
-    var ajaxCan;
-        var date = new Date();
-        var n = date.toISOString().slice(0,10);
-        nn = '2017-10-23';
-        $.ajax({
-                url: "http://10.20.12.147:9999/WebServiceContingencia/API/contingencia/"+layerDetails.isParticle+"/"+IDEST+"/"+n+"/00:00",
-                //url: "http://10.20.12.147:9999/WebServiceContingencia/API/contingencia/otres/CCA/"+date.toISOString().slice(0,10)+"/00:00",
-                async: true,
-                //cache: false,
-                crossDomain : true,
-                type: "GET",
-                dataType: 'json',
-                success: function(data) {
-
-                          ajaxCan = true;
-                          
-                          report = [];
-                          forecast = [];
-                          alldates = [];
-                          
-                          ellength = data.report.length;
-                          forecastlen = data.forecast.length;
-                          
-                        //day1=new Date('2017-10-23');
-                        day1=new Date();
-                        day1.setHours(0,0,0,0);
-                        day2 = (day1).addDays(-1);
-                        //eday = (day1).addDays(2);
-                        eday = (day1).addDays(1);
-                        var dateArray = getDates(day2,eday);
-                        
-                        for(var i=0;i<ellength;i++){
-                            fechaRd = new Date(data.report[i][0]);
-                            if( i < forecastlen ){
-                                fechaRdi = new Date(data.forecast[i][0]);
-                            }
-                            for(var j=0;j<dateArray.length;j++){
-                                
-                                if(fechaRd.getTime()  ===  dateArray[j].getTime()){
-                                    report[j] = data.report[i][1];
-                                } else if(report[j] != null) {
-                                    //
-                                } else {
-                                    report[j] = null;
-                                }
-                                if( i < forecastlen ){
-                                    if(fechaRdi.getTime() === dateArray[j].getTime() ){
-                                        forecast[j] = data.forecast[i][1];
-                                    } else if(forecast[j] != null) {
-                                        //
-                                    } else {
-                                        forecast[j] = null;
-                                    }
-                                }
-                            }
-                        }
-                          
-                        Highcharts.chart('forecastvsreportHighcharts', {
-                            chart: {
-                                width: document.getElementById('v-pills-tabContent').offsetWidth-30,
-                                height: document.getElementById('estaciones_charts').offsetHeight-60
-                            },
-                            title: {
-                              text: 'Forecast VS Report'
-                            },
-                            subtitle: {
-                                text: 'Particle: '+layerDetails.isParticle+', data from '+IDEST
-                            },
-                            xAxis: {
-                                categories: dateArray,
-                                //crosshair: true,
-                                labels: {
-                                    formatter: function () {
-                                        return this.value.getDate()+'/'+this.value.getMonth()+'/'+this.value.getFullYear()+' '+this.value.getHours()+":00";
-                                    }
-                                }
-                                
-                            },
-                            yAxis: [
-                                { // Primary yAxis
-                                    labels: {
-                                        //format: '{value}°C',
-                                        
-                                    },
-                                    title: {
-                                        text: 'concentracion de particulas',
-                                        
-                                    }
-
-                                }
-                            ],
-                            tooltip: {
-                                    shared: true
-                                    //pointFormat: "{point.y:.2f} "
-                            },
-                            series: [{
-                                    name: 'Report',
-                                    type: 'spline',
-                                    data: report,
-                                    dashStyle: 'shortdot'
-
-                                }, {
-                                    name: 'Forecast',
-                                    type: 'spline',
-                                    data: forecast,
-                                }]
-                            }
-                        );
-
-                        },
-                        error: function(ex) {
-                          console.log(ex);
-                          console.log('NOT!');
-                          ajaxCan = false; 
-                        }
-                      });
-                      
-                        
-                      if(ajaxCan){
-                        if(mobile){
-                            document.getElementById("forecastvsreportHighcharts").style.display = 'block';
-                        }
-                      }
+    createChartFVSR(IDEST);
 }
 
 Date.prototype.addDays = function(days) {
@@ -433,4 +178,124 @@ function getDates(startDate, stopDate) {
         currentDate = currentDate.addHours(1);
       }
       return dateArray;
+}
+
+function createChartFVSR(id_est){
+    var ajaxCan;
+    var date = new Date();
+    var n = date.toISOString().slice(0,10);
+
+    $.ajax({
+                url: "http://10.20.12.147:9999/WebServiceContingencia/API/contingencia/"+layerDetails.isParticle+"/"+id_est+"/"+n+"/00:00",
+                async: true,
+                crossDomain : true,
+                type: "GET",
+                dataType: 'json',
+                success: function(data) {
+                    
+                          ajaxCan = true;
+                          
+                          report = [];
+                          forecast = [];
+                          alldates = [];
+                          
+                          ellength = data.report.length;
+                          forecastlen = data.forecast.length;
+                          
+                        day1=new Date();
+                        day1.setHours(0,0,0,0);
+                        day2 = (day1).addDays(-1);
+                        eday = (day1).addDays(1);
+                        var dateArray = getDates(day2,eday);
+                        
+                        for(var i=0;i<ellength;i++){
+                            fechaRd = new Date(data.report[i][0]);
+                            for(var j=0;j<dateArray.length;j++){
+                                if(fechaRd.getTime()  ===  dateArray[j].getTime()){
+                                    report[j] = data.report[i][1];
+                                } else if(report[j] != null) {
+                                    //
+                                } else {
+                                    report[j] = null;
+                                }
+                            }
+                        }
+                        
+                        for(var i=0;i<forecastlen;i++){
+                            fechaRdi = new Date(data.forecast[i][0]);
+                            for(var j=0;j<dateArray.length;j++){
+                                
+                                    if(fechaRdi.getTime() === dateArray[j].getTime() ){
+                                        forecast[j] = data.forecast[i][1];
+                                    } else if(forecast[j] != null) {
+                                        //
+                                    } else {
+                                        forecast[j] = null;
+                                    }
+                            }
+                        }
+                          
+                        Highcharts.chart('forecastvsreportHighcharts', {
+                            chart: {
+                                width: document.getElementById('v-pills-tabContent').offsetWidth-30,
+                                height: document.getElementById('estaciones_charts').offsetHeight-60
+                            },
+                            title: {
+                              text: 'Pronóstico VS Informe'
+                            },
+                            subtitle: {
+                                text: 'Contaminante: '+layerDetails.isParticle+', datos de '+id_est
+                            },
+                            xAxis: {
+                                categories: dateArray,
+                                //crosshair: true,
+                                labels: {
+                                    formatter: function () {
+                                        return this.value.getDate()+'/'+this.value.getMonth()+'/'+this.value.getFullYear()+' '+this.value.getHours()+":00";
+                                    }
+                                },
+                                    title: {
+                                        text: 'Fecha',
+                                        
+                                    }
+                                
+                            },
+                            yAxis: [
+                                { // Primary yAxis
+                                    labels: {
+                                        //format: '{value}°C',
+                                        
+                                    },
+                                    title: {
+                                        text: 'Concentración del contaminante',
+                                        
+                                    }
+
+                                }
+                            ],
+                            tooltip: {
+                                    shared: true
+                                    //pointFormat: "{point.y:.2f} "
+                            },
+                            series: [{
+                                    name: 'Informe',
+                                    type: 'spline',
+                                    data: report,
+                                    dashStyle: 'shortdot'
+
+                                }, {
+                                    name: 'Pronóstico',
+                                    type: 'spline',
+                                    data: forecast,
+                                }]
+                            }
+                        );
+
+                        },
+                        error: function(ex) {
+                          console.log(ex);
+                          console.log('NOT!');
+                          ajaxCan = false; 
+                        }
+                      });
 }
