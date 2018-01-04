@@ -98,7 +98,9 @@ owgis.interf.loadingatmap = function(loading,percentage,extraText){
 function modifyInterface(){
     if(layerDetails.isParticle != "false" && !mobile){
         //add to "#v-pills-tab"
-        var estaciones= ['AJM', 'MGH', 'CCA', 'SFE', 'UAX', 'CUA', 'NEZ', 'CAM','LPR','SJA','IZT','SAG','TAH','ATI','FAC','UIZ','MER','PED','TLA','XAL','CHO','BJU'];
+//        var estaciones= ['AJM', 'MGH', 'CCA', 'SFE', 'UAX', 'CUA', 'NEZ', 'CAM','LPR','SJA','IZT','SAG','TAH','ATI','FAC','UIZ','MER','PED','TLA','XAL','CHO','BJU'];
+        var estaciones= ['AJM', 'MGH', 'SFE', 'UAX', 'CUA', 'NEZ', 'CAM','LPR', 'SAG','TAH','ATI','FAC','UIZ','MER','PED','TLA','XAL','BJU'];
+		estaciones.sort();
         
         for( var i=0; i<estaciones.length; i++ ){
             //create new li element like:
@@ -170,23 +172,15 @@ Date.prototype.addHours= function(h){
     return copiedDate;
 }
 
-function getDates(startDate, stopDate) {
-      var dateArray = new Array();
-      var currentDate = startDate;
-      while (currentDate <= stopDate) {
-        dateArray.push(currentDate)
-        currentDate = currentDate.addHours(1);
-      }
-      return dateArray;
-}
 
 function createChartFVSR(id_est){
     var ajaxCan;
-    var date = new Date();
-    var n = date.toISOString().slice(0,10);
-    hr = addZero(date.getHours())+':'+addZero(date.getMinutes());
-    console.log(hr);
-    elurl = "http://132.248.8.98:12999/WebServiceContingencia/API/contingencia/"+layerDetails.isParticle+"/"+id_est+"/"+n+"/"+hr;
+    var currDate = moment();
+    var dateStr = currDate.format("YYYY-MM-DD");//Gets current date
+    var hour = currDate.format("HH");// Gets current hour
+	
+//    var elurl = "http://132.248.8.98:12999/WebServiceContingencia/API/contingencia/"+layerDetails.isParticle+"/"+id_est+"/"+dateStr+"/"+hour;
+    var elurl = "http://localhost:8888/WebServiceContingencia/API/contingencia/"+layerDetails.isParticle+"/"+id_est+"/"+dateStr+"/"+hour;
     console.log(elurl);
     $.ajax({
                 url: elurl,
@@ -195,118 +189,162 @@ function createChartFVSR(id_est){
                 type: "GET",
                 dataType: 'json',
                 success: function(data) {
-                    
-                    console.log(data);
-                          ajaxCan = true;
-                          
-                          report = [];
-                          forecast = [];
-                          alldates = [];
-                          
-                          ellength = data.report.length;
-                          forecastlen = data.forecast.length;
-                          
-                        day1=date;
-                        day1.setHours(hr.slice(0,2),0,0,0);
-                        day2 = (day1).addDays(-1);
-                        eday = (day1).addDays(1);
-                        var dateArray = getDates(day2,eday);
-                        
-                        for(var i=0;i<ellength;i++){
-                            fechaRd = new Date(data.report[i][0]);
-                            for(var j=0;j<dateArray.length;j++){
-                                if(fechaRd.getTime()  ===  dateArray[j].getTime()){
-                                    report[j] = data.report[i][1];
-                                } else if(report[j] != null) {
-                                    //
-                                } else {
-                                    report[j] = null;
-                                }
-                            }
-                        }
-                        
-                        for(var i=0;i<forecastlen;i++){
-                            fechaRdi = new Date(data.forecast[i][0]);
-                            for(var j=0;j<dateArray.length;j++){
-                                
-                                    if(fechaRdi.getTime() === dateArray[j].getTime() ){
-                                        if(data.forecast[i][1] != -1){ forecast[j] = data.forecast[i][1]; }
-                                    } else if(forecast[j] != null) {
-                                        //
-                                    } else {
-                                        forecast[j] = null;
-                                    }
-                            }
-                        }
-                          
-                        Highcharts.chart('forecastvsreportHighcharts', {
-                            chart: {
-                                width: document.getElementById('v-pills-tabContent').offsetWidth-30,
-                                height: document.getElementById('estaciones_charts').offsetHeight-60
-                            },
-                            title: {
-                              text: 'Pronóstico VS Informe'
-                            },
-                            subtitle: {
-                                text: 'Contaminante: '+layerDetails.isParticle+', datos de '+id_est
-                            },
-                            xAxis: {
-                                categories: dateArray,
-                                //crosshair: true,
-                                labels: {
-                                    formatter: function () {
-                                        return this.value.getDate()+'/'+this.value.getMonth()+'/'+this.value.getFullYear()+' '+this.value.getHours()+":00";
-                                    }
-                                },
-                                    title: {
-                                        text: 'Fecha',
-                                        
-                                    }
-                                
-                            },
-                            yAxis: [
-                                { // Primary yAxis
-                                    labels: {
-                                        //format: '{value}°C',
-                                        
-                                    },
-                                    title: {
-                                        text: 'Concentración del contaminante',
-                                        
-                                    }
-
-                                }
-                            ],
-                            tooltip: {
-                                    shared: true
-                                    //pointFormat: "{point.y:.2f} "
-                            },
-                            series: [{
-                                    name: 'Informe',
-                                    type: 'spline',
-                                    data: report,
-                                    dashStyle: 'shortdot'
-
-                                }, {
-                                    name: 'Pronóstico',
-                                    type: 'spline',
-                                    data: forecast,
-                                }]
-                            }
-                        );
-
-                        },
-                        error: function(ex) {
-                          console.log(ex);
-                          console.log('NOT!');
-                          ajaxCan = false; 
-                        }
-                      });
+			
+					console.log(data);
+					ajaxCan = true;
+					
+					var report = [];
+					var forecast = [];
+					
+					//Access the result data from
+					var reportLength = data.report.length;
+					var forecastLength = data.forecast.length;
+					var station = data.station;
+					
+					// Create the range of dates that we can obtain back
+					// from the query
+					var currDate= moment();
+					// Set the minutes and seconds to 0
+					currDate.minutes(0);
+					currDate.seconds(0);
+					var currDateMinus24 = currDate.clone();
+					currDateMinus24 = currDateMinus24.add(-1,'day');
+					var currDatePlus24= currDate.clone();
+					currDatePlus24= currDatePlus24.add(1,'day');
+					var dateArray = getDatesRangeMoment(currDateMinus24, currDatePlus24);
+					
+					//Iterate over the 'report' data and fill the values
+					// in the correct dates.
+					for(var i=0;i<reportLength;i++){
+						var fechaRd = moment(data.report[i][0]);
+						for(var j=0;j<dateArray.length;j++){
+//							console.log(fechaRd.format()+ " -- " +dateArray[j].format());
+							if(moment(dateArray[j].format()).isSame(fechaRd.format())){
+								report[j] = data.report[i][1];
+							} else if(_.isUndefined(report[j])) {
+									report[j] = null;
+								}
+						}
+					}
+					//Iterate over the 'forecast' data and fill the values
+					// in the correct dates.
+					for(var i=0;i<forecastLength;i++){
+						var fechaRdi = moment(data.forecast[i][0]);
+						for(var j=0;j<dateArray.length;j++){
+							if(moment(dateArray[j].format()).isSame(fechaRdi.format())){
+								if(data.forecast[i][1] !== -1){ 
+									forecast[j] = Math.round(data.forecast[i][1]); 
+								}
+							} else if(_.isUndefined(forecast[j])) {
+								forecast[j] = null;
+							}
+						}
+					}
+					
+					//Create the plots
+					Highcharts.chart('forecastvsreportHighcharts', {
+						chart: {
+							width: document.getElementById('v-pills-tabContent').offsetWidth-30,
+							height: document.getElementById('estaciones_charts').offsetHeight-60
+						},
+						title: {
+							text: 'Estación VS Pronóstico, ' +station
+						},
+						subtitle: {
+							text: 'Contaminante '+getContaminantName(layerDetails.isParticle)
+						},
+						xAxis: {
+							categories: getStringsFromDateArray(dateArray,"DD/MM/YYYY hh A"),
+							//crosshair: true,
+							labels: {
+								formatter: function () {
+									return this.value;
+								}
+							},
+							title: {
+								text: 'Fecha',
+							}
+							
+						},
+						yAxis: [
+							{ // Primary yAxis
+								labels: {
+									//format: '{value}°C',
+								},
+								title: {
+									text: 'Concentración del contaminante',
+									
+								},
+								min: 0,
+								max: Math.max(Math.max.apply(NaN,forecast), Math.max.apply(NaN,report)) 
+							}
+						],
+						tooltip: {
+							shared: true
+							//pointFormat: "{point.y:.2f} "
+						},
+						series: [{
+								name: 'Estación',
+								type: 'spline',
+								data: report,
+								dashStyle: 'shortdot'
+								
+							}, {
+								name: 'Pronóstico',
+								type: 'spline',
+								data: forecast,
+							}]
+					}
+							);
+					
+				},
+				error: function(ex) {
+					console.log(ex);
+					console.log('NOT!');
+					ajaxCan = false; 
+				}
+			});
 }
 
-function addZero(i) {
-    if (i < 10) {
-        i = "0" + i;
-    }
-    return i;
+
+function getStringsFromDateArray(dateArray,dateFormat){
+	var dateArrayStr = new Array();
+	for(var i=0; i <dateArray.length; i++){
+        dateArrayStr.push(dateArray[i].format(dateFormat));
+	}
+	return dateArrayStr;
+}
+
+/**
+* This function is used to obtain the correct title for each contaminant 
+* @param {type} shortName
+* @returns {String}
+*/
+function getContaminantName(shortName){
+var shortNames = ["pmdoscinco", "pmdiez", "nox" , "codos" , "co" , "nodos" , "no" , "otres" , "sodos"];
+var longNames = ["PM2.5", "PM10", "NOX", "CO2", "CO", "NO2", "NO", "O3", "SO2"];
+for(var i=0; i<shortNames.length; i++){
+	if(shortNames[i] === shortName){
+		return longNames[i];
+	}
+}
+}
+
+function getDatesRangeMoment(startDate, stopDate) {
+var dateArray = new Array();
+var range = moment.range(startDate,stopDate);
+for(let currHour of range.by('hours')){
+	dateArray.push(currHour);
+}
+return dateArray;
+}
+
+function getDates(startDate, stopDate) {
+var dateArray = new Array();
+var currentDate = startDate;
+while (currentDate <= stopDate) {
+	dateArray.push(currentDate)
+	currentDate = currentDate.addHours(1);
+}
+return dateArray;
 }
