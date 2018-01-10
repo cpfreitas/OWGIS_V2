@@ -248,7 +248,7 @@ function createChartFVSR(id_est){
                               text: 'Pronóstico VS Informe'
                             },
                             subtitle: {
-                                text: 'Contaminante: '+layerDetails.isParticle+', datos de '+id_est
+                                text: 'Contaminante: '+layerDetails.isParticle+', datos de '+data.station
                             },
                             xAxis: {
                                 categories: dateArray,
