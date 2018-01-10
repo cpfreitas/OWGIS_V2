@@ -179,8 +179,8 @@ function createChartFVSR(id_est){
     var dateStr = currDate.format("YYYY-MM-DD");//Gets current date
     var hour = currDate.format("HH");// Gets current hour
 	
-//    var elurl = "http://132.248.8.98:12999/WebServiceContingencia/API/contingencia/"+layerDetails.isParticle+"/"+id_est+"/"+dateStr+"/"+hour;
-    var elurl = "http://localhost:8888/WebServiceContingencia/API/contingencia/"+layerDetails.isParticle+"/"+id_est+"/"+dateStr+"/"+hour;
+    var elurl = "http://132.248.8.98:12999/WebServiceContingencia/API/contingencia/"+layerDetails.isParticle+"/"+id_est+"/"+dateStr+"/"+hour;
+//    var elurl = "http://localhost:8888/WebServiceContingencia/API/contingencia/"+layerDetails.isParticle+"/"+id_est+"/"+dateStr+"/"+hour;
     console.log(elurl);
     $.ajax({
                 url: elurl,
@@ -189,87 +189,6 @@ function createChartFVSR(id_est){
                 type: "GET",
                 dataType: 'json',
                 success: function(data) {
-<<<<<<< HEAD
-                    
-                    console.log(data);
-                          ajaxCan = true;
-                          
-                          report = [];
-                          forecast = [];
-                          alldates = [];
-                          
-                          ellength = data.report.length;
-                          forecastlen = data.forecast.length;
-                          
-                        day1=date;
-                        day1.setHours(hr.slice(0,2),0,0,0);
-                        day2 = (day1).addDays(-1);
-                        eday = (day1).addDays(1);
-                        var dateArray = getDates(day2,eday);
-                        
-                        for(var i=0;i<ellength;i++){
-                            fechaRd = new Date(data.report[i][0]);
-                            for(var j=0;j<dateArray.length;j++){
-                                if(fechaRd.getTime()  ===  dateArray[j].getTime()){
-                                    report[j] = data.report[i][1];
-                                } else if(report[j] != null) {
-                                    //
-                                } else {
-                                    report[j] = null;
-                                }
-                            }
-                        }
-                        
-                        for(var i=0;i<forecastlen;i++){
-                            fechaRdi = new Date(data.forecast[i][0]);
-                            for(var j=0;j<dateArray.length;j++){
-                                
-                                    if(fechaRdi.getTime() === dateArray[j].getTime() ){
-                                        if(data.forecast[i][1] != -1){ forecast[j] = data.forecast[i][1]; }
-                                    } else if(forecast[j] != null) {
-                                        //
-                                    } else {
-                                        forecast[j] = null;
-                                    }
-                            }
-                        }
-                          
-                        Highcharts.chart('forecastvsreportHighcharts', {
-                            chart: {
-                                width: document.getElementById('v-pills-tabContent').offsetWidth-30,
-                                height: document.getElementById('estaciones_charts').offsetHeight-60
-                            },
-                            title: {
-                              text: 'Pronóstico VS Informe'
-                            },
-                            subtitle: {
-                                text: 'Contaminante: '+layerDetails.isParticle+', datos de '+data.station
-                            },
-                            xAxis: {
-                                categories: dateArray,
-                                //crosshair: true,
-                                labels: {
-                                    formatter: function () {
-                                        return this.value.getDate()+'/'+this.value.getMonth()+'/'+this.value.getFullYear()+' '+this.value.getHours()+":00";
-                                    }
-                                },
-                                    title: {
-                                        text: 'Fecha',
-                                        
-                                    }
-                                
-                            },
-                            yAxis: [
-                                { // Primary yAxis
-                                    labels: {
-                                        //format: '{value}°C',
-                                        
-                                    },
-                                    title: {
-                                        text: 'Concentración del contaminante',
-                                        
-                                    }
-=======
 			
 					console.log(data);
 					ajaxCan = true;
@@ -387,7 +306,6 @@ function createChartFVSR(id_est){
 			});
 }
 
->>>>>>> 71f85abdf224acd06fde2a51995e57ebafeb6f0e
 
 function getStringsFromDateArray(dateArray,dateFormat){
 	var dateArrayStr = new Array();
