@@ -94,7 +94,9 @@ function initOl3(){
 			changeProj = true;
 		}else{
 			defCenter= [lon,lat];
-                        resExtent = ol.proj.transformExtent(mapConfig.restrictedExtent.split(",").map(Number), 'EPSG:4326', _map_projection);
+                        if(typeof mapConfig.restrictedExtent !== 'undefined'){
+                            resExtent = ol.proj.transformExtent(mapConfig.restrictedExtent.split(",").map(Number), 'EPSG:4326', _map_projection);
+                        }
 		}
 	}else{
 		if( (_map_bk_layer === "osm") || 
@@ -108,9 +110,13 @@ function initOl3(){
 	
 	if(changeProj){
 		defCenter = ol.proj.transform([lon, lat], 'EPSG:4326', _map_projection);
-		resExtent = ol.proj.transformExtent(mapConfig.restrictedExtent.split(",").map(Number), 'EPSG:4326', _map_projection);
+                if(typeof mapConfig.restrictedExtent !== 'undefined'){
+                    resExtent = ol.proj.transformExtent(mapConfig.restrictedExtent.split(",").map(Number), 'EPSG:4326', _map_projection);
+                }
 	}
-        resExtent = ol.proj.transformExtent(mapConfig.restrictedExtent.split(",").map(Number), 'EPSG:4326', _map_projection);
+        if(typeof mapConfig.restrictedExtent !== 'undefined' && typeof resExtent !== 'undefined'){
+            resExtent = ol.proj.transformExtent(mapConfig.restrictedExtent.split(",").map(Number), 'EPSG:4326', _map_projection);
+        }
 	//This control is used to display Lat and Lon when the user is moving the mouse over the map
 	var mousePositionControl = new ol.control.MousePosition({
 		coordinateFormat: ol.coordinate.createStringXY(4),
@@ -216,7 +222,7 @@ function initOl3(){
                 map.once('change:ready', whenMapIsReady.bind(null, callback));
         }
         
-        map.getView().fit(resExtent, map.getSize()); 
+        //map.getView().fit(resExtent, map.getSize()); 
 
         
 }

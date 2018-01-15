@@ -8,9 +8,6 @@
 <div id="leftFooter" class="leftFoot">
 	&nbsp;
 	<a  href="#">
-		<img border="0" src="./common/images/Logos/logo.png" alt="Logo" width="30" height="30" /></a>
-	&nbsp;
-	<a  href="#">
 		<img border="0" src="./common/images/Logos/unam.png" alt="Logo" width="30" height="30" /></a>
 	&nbsp; 
 </div>
