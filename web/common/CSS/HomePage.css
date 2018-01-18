@@ -130,6 +130,7 @@ div.leftFoot {
   -webkit-border-radius: 7px;
   border-radius: 7px;
   bottom: 50px;
+  bottom: 35%;
   right: 5%;
   width: 14em;
   min-height: 4em;
@@ -137,6 +138,12 @@ div.leftFoot {
   pointer-events: none;
   background-image: url("../images/transBack.png");
   font-weight: bold;
+}
+
+@media screen and (max-height: 1000px) and (min-height: 600px) {
+    .layersLonLat {
+        bottom: 40%;
+    }
 }
 
 /*Data displayed for JSONP layers above the latitude and longitude*/

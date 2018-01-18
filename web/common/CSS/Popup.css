@@ -172,6 +172,19 @@ h5#modalLabelVertProf, h5#modalLabelTimeSeries {
     border-radius: 8px; 
     display: none;
 }
+#est_list_container{
+   float: left;
+   /*width: 120px;*/
+   position: relative;
+   min-height: 1px;
+   padding-right: 15px;
+   padding-left: 15px;
+}
+#est_graph_container{
+    float: left;
+    position: relative;
+    padding:0 !important;
+}
 .tab-content>.tab-pane>p{
     color: #333333;
 }/*
@@ -185,3 +198,10 @@ h5#modalLabelVertProf, h5#modalLabelTimeSeries {
 .modal-header {
     cursor: move;
 }
+
+@media screen and (max-width: 1500px) and (min-width: 700px) {
+    #estaciones_charts{
+        width: 90%;
+    }
+}
+

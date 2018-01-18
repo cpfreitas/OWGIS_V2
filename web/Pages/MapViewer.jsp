@@ -75,12 +75,12 @@ This is the main jsp file that forms the html webpage. It contains the skeleton 
                 <!-- These divs are required for highcharts exclusively custom for this project -->
                 <div id="estaciones_charts" class="container">
                     <div class="row">
-                        <div class="col-md-3" id="est_list_container">
+                        <div class="col-md-2 col-sm-3 col-lg-1" id="est_list_container">
                               <ul class="nav flex-column nav-pills nav-stacked" id="v-pills-tab" aria-orientation="vertical" role="tablist">
                                 
                               </ul>
                         </div>
-                        <div class="col-md-9" style="padding:0 !important;">
+                        <div class="col-md-10 col-sm-9 col-lg-11" id="est_graph_container">
                           <div class="tab-content" id="v-pills-tabContent">
                             <div class="tab-pane fade in active" id="v-pills-est" role="tabpanel" >
                                 <div id="forecastvsreportHighcharts"></div>
