@@ -96,7 +96,7 @@ owgis.interf.loadingatmap = function(loading,percentage,extraText){
  * @returns {undefined}
  */
 function modifyInterface(){
-    if(layerDetails.isParticle != "false" && !mobile){
+    if(layerDetails.isParticle != "false" && !mobile && false){
         //add to "#v-pills-tab"
 //        var estaciones= ['AJM', 'MGH', 'CCA', 'SFE', 'UAX', 'CUA', 'NEZ', 'CAM','LPR','SJA','IZT','SAG','TAH','ATI','FAC','UIZ','MER','PED','TLA','XAL','CHO','BJU'];
         var estaciones= ['AJM', 'MGH', 'SFE', 'UAX', 'CUA', 'NEZ', 'CAM','LPR', 'SAG','TAH','ATI','FAC','UIZ','MER','PED','TLA','XAL','BJU'];
