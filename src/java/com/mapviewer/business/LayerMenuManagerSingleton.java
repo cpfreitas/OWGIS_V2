@@ -601,11 +601,10 @@ public class LayerMenuManagerSingleton {
                 
         String belowMinColor = layerConf.getAttributeValue("belowMinColor") != null ? layerConf.getAttributeValue("belowMinColor") : layer.getBelowMinColor();
                 
-                String aboveMaxColor = layerConf.getAttributeValue("aboveMaxColor") != null
-				? layerConf.getAttributeValue("aboveMaxColor") : layer.getAboveMaxColor();
-                
                 String isParticle = layerConf.getAttributeValue("isParticle") != null
 				? layerConf.getAttributeValue("isParticle") : layer.getIsParticle();
+                
+        String aboveMaxColor = layerConf.getAttributeValue("aboveMaxColor") != null ? layerConf.getAttributeValue("aboveMaxColor") : layer.getAboveMaxColor();
 		
 		/*
 		String[] cql_cols = null;
