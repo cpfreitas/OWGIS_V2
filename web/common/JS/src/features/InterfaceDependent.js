@@ -134,17 +134,18 @@ function modifyInterface(){
         document.getElementById('v-pills-tab').style.height = document.getElementById('estaciones_charts').offsetHeight-30+'px' ;
         //$('#estaciones_charts').draggable();
         
-        /*$('#estaciones_charts').resizable({
-                                    minHeight: 500,
-                                    minWidth: 600,
-                                    resize: function( event, ui ) {
-                                        if (typeof $("#forecastvsreportHighcharts").highcharts() != 'undefined'){
-                                            $("#forecastvsreportHighcharts").highcharts().setSize(document.getElementById('v-pills-tabContent').offsetWidth-30, document.getElementById('estaciones_charts').offsetHeight-30, doAnimation = true);
-                                        }
-                                        document.getElementById('v-pills-tab').style.height = document.getElementById('estaciones_charts').offsetHeight-30+'px';
-                                    }
-                                });
-        */                        
+        $('#estaciones_charts').resizable({
+            minHeight: 500,
+            minWidth: 600,
+            handles: "n, e, s, w, se, ne",
+            resize: function( event, ui ) {
+                if (typeof $("#forecastvsreportHighcharts").highcharts() != 'undefined'){
+                    $("#forecastvsreportHighcharts").highcharts().setSize(document.getElementById('v-pills-tabContent').offsetWidth-30, document.getElementById('estaciones_charts').offsetHeight-30, doAnimation = true);
+                }
+                document.getElementById('v-pills-tab').style.height = document.getElementById('estaciones_charts').offsetHeight-30+'px';
+            }
+        });
+                              
         createChartFVSR(estaciones[0]);   
         
         $(window).on('resize', function(){
