@@ -271,7 +271,7 @@ function createChartFVSR(id_est){
 								}
 							},
 							title: {
-								text: 'Fecha',
+								text: 'Fecha'
 							}
 							
 						},
@@ -281,8 +281,7 @@ function createChartFVSR(id_est){
 									//format: '{value}°C',
 								},
 								title: {
-									text: 'Concentración del contaminante',
-									
+									text: 'Concentración del contaminante'
 								},
 								min: 0,
 								max: Math.max(Math.max.apply(NaN,forecast), Math.max.apply(NaN,report)) 
@@ -301,7 +300,7 @@ function createChartFVSR(id_est){
 							}, {
 								name: 'Pronóstico',
 								type: 'spline',
-								data: forecast,
+								data: forecast
 							}]
 					}
 							);
@@ -340,20 +339,20 @@ for(var i=0; i<shortNames.length; i++){
 }
 
 function getDatesRangeMoment(startDate, stopDate) {
-var dateArray = new Array();
-var range = moment.range(startDate,stopDate);
-for(let currHour of range.by('hours')){
-	dateArray.push(currHour);
-}
-return dateArray;
+    var dateArray = new Array();
+    var range = moment.range(startDate,stopDate);
+    for(let currHour of range.by('hours')){
+            dateArray.push(currHour);
+    }
+    return dateArray;
 }
 
 function getDates(startDate, stopDate) {
-var dateArray = new Array();
-var currentDate = startDate;
-while (currentDate <= stopDate) {
-	dateArray.push(currentDate)
-	currentDate = currentDate.addHours(1);
-}
-return dateArray;
+    var dateArray = new Array();
+    var currentDate = startDate;
+    while (currentDate <= stopDate) {
+            dateArray.push(currentDate)
+            currentDate = currentDate.addHours(1);
+    }
+    return dateArray;
 }
