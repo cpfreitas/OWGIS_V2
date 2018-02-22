@@ -17,7 +17,7 @@
 		<%-- Sets all the javascript global variables that are initiated by the java application --%>
 		<%@include file="Header/GlobalJavaScript.jsp"%>
 		<%-- contains all the css links and javascript links --%>
-		<%@include file="Header/Header.jsp"%>
+		<%@include file="Header/HeaderDebug.jsp"%>
 		<%--<%@include file="Header/Header.jsp"%>--%>
 		<title></title>
 	</head>
@@ -110,6 +110,32 @@
 		</script>
 
 		<div class="loadingMobile"></div>
+                
+                <!-- This button is used to plot in mobile custom code -->
+                <button id="pltchrt_btn" class="button button-glow button-circle button-action" ><i class="fa fa-line-chart"></i></button>
+                
+                <!-- These divs are required for highcharts exclusively custom for this project --> 
+                <div id="estaciones_charts_mobile" class="container">
+                    
+                    <a href="#" id="pltchrt-closer" class="ol-popup-closer">
+                        <i class="fa fa-remove"></i>
+                    </a>
+                    
+                    <div class="row">
+                        <div id="est_list_container">
+                              <ul class="nav flex-column nav-pills nav-stacked" id="v-pills-tab" aria-orientation="vertical" role="tablist">
+                                
+                              </ul>
+                        </div>
+                        <div id="est_graph_container">
+                          <div class="tab-content" id="v-pills-tabContent">
+                            <div class="tab-pane fade in active" id="v-pills-est" role="tabpanel" >
+                                <div id="forecastvsreportHighcharts"></div>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                </div>
                 
                 <!-- These divs are required for highcharts -->
                 <div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" id="showVertProf" style="display: none;">

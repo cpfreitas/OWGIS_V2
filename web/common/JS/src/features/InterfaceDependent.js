@@ -96,13 +96,11 @@ owgis.interf.loadingatmap = function(loading,percentage,extraText){
  * @returns {undefined}
  */
 function modifyInterface(){
-    if(layerDetails.isParticle != "false" && !mobile && false){
-        //add to "#v-pills-tab"
-//        var estaciones= ['AJM', 'MGH', 'CCA', 'SFE', 'UAX', 'CUA', 'NEZ', 'CAM','LPR','SJA','IZT','SAG','TAH','ATI','FAC','UIZ','MER','PED','TLA','XAL','CHO','BJU'];
-        var estaciones= ['AJM', 'MGH', 'SFE', 'UAX', 'CUA', 'NEZ', 'CAM','LPR', 'SAG','TAH','ATI','FAC','UIZ','MER','PED','TLA','XAL','BJU'];
-		estaciones.sort();
+    
+    var estaciones= ['AJM', 'MGH', 'SFE', 'UAX', 'CUA', 'NEZ', 'CAM','LPR', 'SAG','TAH','ATI','FAC','UIZ','MER','PED','TLA','XAL','BJU'];
+    estaciones.sort();
         
-        for( var i=0; i<estaciones.length; i++ ){
+    for( var i=0; i<estaciones.length; i++ ){
             //create new li element like:
             // <li role="presentation"><a class="nav-link" id="v-pills-CUA-tab" href="#" role="tab" aria-controls="v-pills-CUA" aria-selected="false" onclick="changeEstTabContent('CUA')">CUA</a></li>
             var newNumberListItem = document.createElement("li");
@@ -128,7 +126,11 @@ function modifyInterface(){
             newNumberListItem.appendChild(newLink);
             //add new list element built in previous steps to unordered list called numberList
             document.getElementById("v-pills-tab").appendChild(newNumberListItem);
-        }
+    }
+    
+    createChartFVSR(estaciones[0]);
+    
+    if(layerDetails.isParticle != "false" && !mobile ){ //&& false
         
         document.getElementById('estaciones_charts').style.display = "block";
         document.getElementById('v-pills-tab').style.height = document.getElementById('estaciones_charts').offsetHeight-30+'px' ;
@@ -145,8 +147,6 @@ function modifyInterface(){
                 document.getElementById('v-pills-tab').style.height = document.getElementById('estaciones_charts').offsetHeight-30+'px';
             }
         });
-                              
-        createChartFVSR(estaciones[0]);   
         
         $(window).on('resize', function(){
             if (typeof $("#forecastvsreportHighcharts").highcharts() != 'undefined'){
@@ -155,6 +155,16 @@ function modifyInterface(){
             document.getElementById('v-pills-tab').style.height = document.getElementById('estaciones_charts').offsetHeight-30+'px';
         });
 
+    } 
+    else if(layerDetails.isParticle != "false" && mobile){
+        
+        $( "#pltchrt_btn" ).click(function() {
+            $( "#estaciones_charts_mobile" ).show();
+        });
+        
+        $("#pltchrt-closer").click(function() {
+		$("#estaciones_charts_mobile").hide();
+	});
     }
 }
 
@@ -181,14 +191,13 @@ Date.prototype.addHours= function(h){
     return copiedDate;
 }
 
-
 function createChartFVSR(id_est){
     var ajaxCan;
     var currDate = moment();
     var dateStr = currDate.format("YYYY-MM-DD");//Gets current date
     var hour = currDate.format("HH");// Gets current hour
 	
-    var elurl = "http://132.248.8.98:12999/WebServiceContingencia/API/contingencia/"+layerDetails.isParticle+"/"+id_est+"/"+dateStr+"/"+hour;
+    var elurl = "http://132.248.8.98:12999/WebServiceContingencia/API/contingencia/"+layerDetails.isParticle+"/"+id_est+"/"+dateStr+"/"+hour+"/1";
 //    var elurl = "http://localhost:8888/WebServiceContingencia/API/contingencia/"+layerDetails.isParticle+"/"+id_est+"/"+dateStr+"/"+hour;
     console.log(elurl);
     $.ajax({
@@ -249,12 +258,30 @@ function createChartFVSR(id_est){
 							}
 						}
 					}
+                                        
+                                        //calculate width for mobile or normal screen
+                                        if(mobile){
+                                            if(screen.width > screen.height){
+                                                el_width = screen.width-(screen.width*.1)-$('#pltchrt-closer').outerWidth()-80;
+                                                el_height = screen.height;
+                                            } else {
+                                                el_height = screen.width;
+                                                el_width = screen.height-(screen.height*.1)-$('#pltchrt-closer').outerWidth()-80;
+                                            }
+                                            
+                                            document.getElementById("forecastvsreportHighcharts").style.display = 'block';
+                                            
+                                        }else{
+                                            el_width = document.getElementById('v-pills-tabContent').offsetWidth - 30;
+                                            el_height = document.getElementById('estaciones_charts').offsetHeight-30;
+                                        }
 					
+                                        console.log(el_width, el_height);
 					//Create the plots
 					Highcharts.chart('forecastvsreportHighcharts', {
 						chart: {
-							width: document.getElementById('v-pills-tabContent').offsetWidth-30,
-							height: document.getElementById('estaciones_charts').offsetHeight-60
+							width: el_width,
+							height: el_height
 						},
 						title: {
 							text: 'Estación VS Pronóstico, ' +station
@@ -264,7 +291,6 @@ function createChartFVSR(id_est){
 						},
 						xAxis: {
 							categories: getStringsFromDateArray(dateArray,"DD/MM/YYYY hh A"),
-							//crosshair: true,
 							labels: {
 								formatter: function () {
 									return this.value;
@@ -284,12 +310,22 @@ function createChartFVSR(id_est){
 									text: 'Concentración del contaminante'
 								},
 								min: 0,
-								max: Math.max(Math.max.apply(NaN,forecast), Math.max.apply(NaN,report)) 
+								max: Math.max(Math.max.apply(NaN,forecast), Math.max.apply(NaN,report))/*,
+                                                                plotBands: [{ // Light air
+                                                                    from: 160,
+                                                                    to: 200,
+                                                                    color: 'rgba(229, 0, 0, 0.1)',
+                                                                    label: {
+                                                                        text: 'Contingencia',
+                                                                        style: {
+                                                                            color: '#606060'
+                                                                        }
+                                                                    }
+                                                                }]*/
 							}
 						],
 						tooltip: {
 							shared: true
-							//pointFormat: "{point.y:.2f} "
 						},
 						series: [{
 								name: 'Estación',
@@ -302,8 +338,7 @@ function createChartFVSR(id_est){
 								type: 'spline',
 								data: forecast
 							}]
-					}
-							);
+					});
 					
 				},
 				error: function(ex) {

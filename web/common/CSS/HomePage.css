@@ -116,7 +116,7 @@ div.leftFoot {
 /* Div to display latitude and longitude*/
 /* line 71, ../scss/HomePage.scss */
 .layersLonLat {
-  z-index: 1008;
+  z-index: 0;
   position: absolute;
   /*border:solid 1px white;*/
   border: none;

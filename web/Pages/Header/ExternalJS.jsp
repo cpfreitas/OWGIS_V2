@@ -17,7 +17,7 @@
 		<script src="./common/JS/vendor/minimized/jquery.slidePanel.js"></script>
 		<script src="./common/JS/vendor/minimized/jquery_ui_datepicker/jquery-ui.min.js"></script>
                 <script src="./common/JS/vendor/minimized/bootstrap.min.js"></script>
-	</c:if>
+        </c:if>
 	<!--this is the Desktop case-->
 	<c:if test='${!mobile}'>
 		<script src="./common/JS/vendor/minimized/jquery-ui.min.js"></script>
