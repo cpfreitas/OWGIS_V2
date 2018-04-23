@@ -9,7 +9,6 @@
 		<Menu ID="DivisionMx" EN="Political Division " ES="División Política " />
 		<Menu ID="paises" EN="Countries" ES="Paises" />
 		<Menu ID="bat" EN="Model Batimetria" ES="Modelo Batimetria" />
-                <Menu ID="estaciones" EN="Stations" ES="Estaciones" />
         </Menus>        
         <!-- Optional layers -->
         <OptionalLayers BBOX="-120,15,-80,32" server="http://132.248.8.238:8080/geoservercenapred/wms" vectorLayer="true"> 
@@ -18,8 +17,7 @@
 		<layer Menu="municipiosMX" name="cen:municipios" EN="MX Counties" ES="Municipios" tiled="true"  selected="true" />
                 <layer Menu="paises" name="cen:paises" EN="Countries" ES="Paises" tiled="true" />
 		<layer Menu="bat" name="cen:batimetria" EN="MX Bathymetry" ES="Batimetria del golfo" tiled="true"  />
-		<layer Menu="estaciones" name="cen:estaciones_geo" EN="Stations" ES="Estaciones" tiled="true"  selected="true" />
-                
+		
 	</OptionalLayers>
         
 </MenuConf>
