@@ -197,7 +197,7 @@ function createChartFVSR(id_est){
     var dateStr = currDate.format("YYYY-MM-DD");//Gets current date
     var hour = currDate.format("HH");// Gets current hour
 	
-    var elurl = "http://132.248.8.98:12999/WebServiceContingencia/API/contingencia/"+layerDetails.isParticle+"/"+id_est+"/"+dateStr+"/"+hour+"/1";
+    var elurl = "http://132.248.8.238:9999/WebServiceContingencia/API/contingencia/"+layerDetails.isParticle+"/"+id_est+"/"+dateStr+"/"+hour+"/1";
 //    var elurl = "http://localhost:8888/WebServiceContingencia/API/contingencia/"+layerDetails.isParticle+"/"+id_est+"/"+dateStr+"/"+hour;
     console.log(elurl);
     $.ajax({
